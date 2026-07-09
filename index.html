@@ -24,7 +24,7 @@
             background-color: #0a050f;
         }
         
-        /* Contenedor del video de fondo con capa oscura y animación */
+        /* Contenedor del video de fondo sin resplandores rojos */
         .video-background-container {
             position: fixed;
             top: 0;
@@ -33,28 +33,25 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
-            /* Añadido un sutil resplandor rojo de fondo */
-            box-shadow: inset 0 0 100px rgba(255, 0, 51, 0.45);
         }
         
-        /* Capa oscura superpuesta para que resalten los textos */
+        /* Capa oscura superpuesta estándar (sin tinte rojo) para legibilidad del texto */
         .video-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Ajustado el gradiente para tintar ligeramente de rojo los bordes */
-            background: radial-gradient(circle, rgba(10, 5, 15, 0.5) 0%, rgba(255, 0, 51, 0.15) 100%), linear-gradient(rgba(10, 5, 15, 0.6), rgba(10, 5, 15, 0.6));
+            background: linear-gradient(rgba(10, 5, 15, 0.65), rgba(10, 5, 15, 0.65));
             z-index: 1;
         }
 
-        /* Indicador .live de rojo */
+        /* Indicador .live de rojo (Se mantiene intacto) */
         .live-indicator {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: rgba(255, 0, 51, 0.85);
+            background: rgba(255, 0, 51, 0.9);
             color: #ffffff;
             font-size: 13px;
             font-weight: 800;
@@ -231,8 +228,10 @@
 
 <body>
 
+    <!-- Etiqueta LIVE (Se mantiene en la esquina superior izquierda) -->
     <div class="live-indicator">Live</div>
 
+    <!-- Video de fondo HTML5 (Limpio de efectos rojos) -->
     <div class="video-background-container">
         <div class="video-overlay"></div>
         <video autoplay loop muted playsinline>
@@ -241,18 +240,21 @@
     </div>
 
     <div class="container">
+        <!-- Paso Inicial -->
         <div id="step0" class="quiz-step active">
             <h1>Finde mädchen Kontakte</h1>
             <p>Antworte auf 3 kurze Fragen, um verifizierte Profile in deiner Nähe zu sehen.</p>
             <button class="cta" onclick="showStep(1)">Jetzt beginnen</button>
         </div>
 
+        <!-- Pregunta 1 -->
         <div id="step1" class="quiz-step">
             <p>1. Was für eine Art von Beziehung suchst du?</p>
             <button class="option" onclick="showStep(2)">Ernste Beziehung</button>
             <button class="option" onclick="showStep(2)">Locker & unverbindlich</button>
         </div>
 
+        <!-- Pregunta 2 -->
         <div id="step2" class="quiz-step">
             <p>2. Wie alt bist du?</p>
             <button class="option" onclick="showStep(3)">21 – 30 Jahre</button>
@@ -260,11 +262,13 @@
             <button class="option" onclick="showStep(3)">Über 45 Jahre</button>
         </div>
 
+        <!-- Pregunta 3 -->
         <div id="step3" class="quiz-step">
             <p>3. Bist du bereit, ein Profil zu erstellen?</p>
             <button class="option" onclick="redirectToOffer()">Ja, ich bin bereit</button>
         </div>
 
+        <!-- Footer -->
         <div class="footer">
             18 Nur für Personen über 21 Jahre
             <br>
