@@ -33,6 +33,8 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            /* Añadido un sutil resplandor rojo de fondo */
+            box-shadow: inset 0 0 100px rgba(255, 0, 51, 0.45);
         }
         
         /* Capa oscura superpuesta para que resalten los textos */
@@ -42,8 +44,44 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(10, 5, 15, 0.65), rgba(10, 5, 15, 0.65));
+            /* Ajustado el gradiente para tintar ligeramente de rojo los bordes */
+            background: radial-gradient(circle, rgba(10, 5, 15, 0.5) 0%, rgba(255, 0, 51, 0.15) 100%), linear-gradient(rgba(10, 5, 15, 0.6), rgba(10, 5, 15, 0.6));
             z-index: 1;
+        }
+
+        /* Indicador .live de rojo */
+        .live-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 0, 51, 0.85);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            z-index: 2;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255, 0, 51, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulseLive 1.5s infinite ease-in-out;
+        }
+
+        .live-indicator::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #ffffff;
+            border-radius: 50%;
+        }
+
+        @keyframes pulseLive {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
         /* El video real con la animación de zoom */
@@ -193,7 +231,8 @@
 
 <body>
 
-    <!-- Video de fondo HTML5 (Se ha removido el atributo poster para evitar la imagen inicial) -->
+    <div class="live-indicator">Live</div>
+
     <div class="video-background-container">
         <div class="video-overlay"></div>
         <video autoplay loop muted playsinline>
@@ -202,21 +241,18 @@
     </div>
 
     <div class="container">
-        <!-- Paso Inicial -->
         <div id="step0" class="quiz-step active">
             <h1>Finde mädchen Kontakte</h1>
             <p>Antworte auf 3 kurze Fragen, um verifizierte Profile in deiner Nähe zu sehen.</p>
             <button class="cta" onclick="showStep(1)">Jetzt beginnen</button>
         </div>
 
-        <!-- Pregunta 1 -->
         <div id="step1" class="quiz-step">
             <p>1. Was für eine Art von Beziehung suchst du?</p>
             <button class="option" onclick="showStep(2)">Ernste Beziehung</button>
             <button class="option" onclick="showStep(2)">Locker & unverbindlich</button>
         </div>
 
-        <!-- Pregunta 2 -->
         <div id="step2" class="quiz-step">
             <p>2. Wie alt bist du?</p>
             <button class="option" onclick="showStep(3)">21 – 30 Jahre</button>
@@ -224,13 +260,11 @@
             <button class="option" onclick="showStep(3)">Über 45 Jahre</button>
         </div>
 
-        <!-- Pregunta 3 -->
         <div id="step3" class="quiz-step">
             <p>3. Bist du bereit, ein Profil zu erstellen?</p>
             <button class="option" onclick="redirectToOffer()">Ja, ich bin bereit</button>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
             18 Nur für Personen über 21 Jahre
             <br>
