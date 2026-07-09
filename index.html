@@ -46,7 +46,7 @@
             z-index: 1;
         }
 
-        /* Indicador .live de rojo (Se mantiene intacto) */
+        /* Indicador .live de rojo */
         .live-indicator {
             position: fixed;
             top: 20px;
@@ -98,7 +98,7 @@
             }
         }
 
-        /* Tarjeta con mayor transparencia y efecto cristal (Glassmorphism) */
+        /* Tarjeta base (Estilo móvil original intacto) */
         .container {
             width: 100%;
             max-width: 420px;
@@ -223,15 +223,52 @@
             border-radius: 10px;
             line-height: 1.4;
         }
+
+        /* MODIFICACIÓN: Estilos exclusivos para Versión Escritorio (Pantallas mayores a 768px) */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 580px; /* Aumenta el ancho de la tarjeta */
+                padding: 50px 40px; /* Más espacio interno */
+                border-radius: 32px; /* Bordes ligeramente más amplios y estilizados */
+            }
+            h1 {
+                font-size: 32px; /* Título más grande acorde al nuevo tamaño */
+                margin-bottom: 20px;
+            }
+            p {
+                font-size: 20px; /* Textos descriptivos más grandes */
+                margin-bottom: 35px;
+            }
+            button.option {
+                font-size: 19px; /* Botones de opciones más cómodos en pc */
+                padding: 20px;
+                margin: 16px 0;
+            }
+            button.cta {
+                font-size: 22px; /* Botón de acción principal proporcional */
+                padding: 22px;
+                margin-top: 25px;
+            }
+            .footer {
+                font-size: 13px;
+                margin-top: 40px;
+                padding-top: 20px;
+            }
+            .footer-warning {
+                font-size: 14px;
+                padding: 12px 18px;
+                margin-top: 16px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- Etiqueta LIVE (Se mantiene en la esquina superior izquierda) -->
+    <!-- Etiqueta LIVE -->
     <div class="live-indicator">Live</div>
 
-    <!-- Video de fondo HTML5 (Limpio de efectos rojos) -->
+    <!-- Video de fondo HTML5 -->
     <div class="video-background-container">
         <div class="video-overlay"></div>
         <video autoplay loop muted playsinline>
