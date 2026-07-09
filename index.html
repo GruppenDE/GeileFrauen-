@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Exklusive Kontakte finden</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background-color: #0a050f;
+        }
+        
+        /* Contenedor del video de fondo con capa oscura y animación */
+        .video-background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        /* Capa oscura superpuesta para que resalten los textos */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(10, 5, 15, 0.65), rgba(10, 5, 15, 0.65));
+            z-index: 1;
+        }
+
+        /* El video real con la animación de zoom */
+        .video-background-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: zoomBackground 16s infinite ease-in-out;
+        }
+
+        @keyframes zoomBackground {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.12);
+            }
+        }
+
+        /* Tarjeta con mayor transparencia y efecto cristal (Glassmorphism) */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(18, 12, 24, 0.18);
+            backdrop-filter: blur(3px); 
+            -webkit-backdrop-filter: blur(8px);
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 20, 147, 0.15), 0 5px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            border: 1px solid rgba(255, 45, 120, 0.25);
+            position: relative;
+            z-index: 2;
+        }
+        h1 { 
+            font-size: 24px; 
+            margin-bottom: 15px; 
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(45deg, #ff2d78, #ff6b4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p { 
+            font-size: 16px; 
+            line-height: 1.5; 
+            color: #e0d5ea; 
+            margin-bottom: 25px; 
+            font-weight: 400; 
+        }
+
+        /* Manejo de los pasos del cuestionario */
+        .quiz-step { display: none; }
+        .active { display: block; }
+        
+        /* Botones de las preguntas */
+        button.option {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        button.option:hover { 
+            border-color: #ff2d78; 
+            background: rgba(255, 45, 120, 0.15);
+            color: #ff4088;
+            box-shadow: 0 0 10px rgba(255, 45, 120, 0.2);
+        }
+        button.option:active { transform: scale(0.98); }
+        
+        /* Botón de acción principal con animación de pulso suave */
+        button.cta {
+            background: linear-gradient(135deg, #ff0055 0%, #ff5500 100%);
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
+            transition: all 0.3s ease;
+            animation: pulseButton 2.5s infinite ease-in-out;
+        }
+        
+        @keyframes pulseButton {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
+            }
+            50% {
+                transform: scale(1.04);
+                box-shadow: 0 10px 28px rgba(255, 0, 85, 0.65);
+            }
+        }
+
+        button.cta:hover { 
+            background: linear-gradient(135deg, #e6004c 0%, #dd4400 100%);
+            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.5);
+            transform: translateY(-1px) scale(1.02);
+            animation-play-state: paused;
+        }
+        button.cta:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        
+        /* Footer con restricción de edad resaltada */
+        .footer { 
+            margin-top: 30px; 
+            font-size: 11px; 
+            color: #ff4088; 
+            border-top: 1px solid rgba(255, 45, 120, 0.15); 
+            padding-top: 15px; 
+            font-weight: 700; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Remarcado de rojo para el texto de advertencia */
+        .footer-warning {
+            display: inline-block;
+            margin-top: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: normal;
+            border: 2px solid #ff0033; /* Borde rojo vivo */
+            background: rgba(255, 0, 51, 0.15); /* Fondo rojo muy traslúcido para destacar */
+            padding: 10px 14px;
+            border-radius: 10px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Video de fondo HTML5 -->
+    <div class="video-background-container">
+        <div class="video-overlay"></div>
+        <video autoplay loop muted playsinline poster="https://i.imgur.com/GTnHutQ.jpeg">
+            <source src="https://files.catbox.moe/1l6hnc.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="container">
+        <!-- Paso Inicial -->
+        <div id="step0" class="quiz-step active">
+            <h1>Finde mädchen Kontakte</h1>
+            <p>Antworte auf 3 kurze Fragen, um verifizierte Profile in deiner Nähe zu sehen.</p>
+            <button class="cta" onclick="showStep(1)">Jetzt beginnen</button>
+        </div>
+
+        <!-- Pregunta 1 -->
+        <div id="step1" class="quiz-step">
+            <p>1. Was für eine Art von Beziehung suchst du?</p>
+            <button class="option" onclick="showStep(2)">Ernste Beziehung</button>
+            <button class="option" onclick="showStep(2)">Locker & unverbindlich</button>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div id="step2" class="quiz-step">
+            <p>2. Wie alt bist du?</p>
+            <button class="option" onclick="showStep(3)">21 – 30 Jahre</button>
+            <button class="option" onclick="showStep(3)">31 – 45 Jahre</button>
+            <button class="option" onclick="showStep(3)">Über 45 Jahre</button>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div id="step3" class="quiz-step">
+            <p>3. Bist du bereit, ein Profil zu erstellen?</p>
+            <button class="option" onclick="redirectToOffer()">Ja, ich bin bereit</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            18 Nur für Personen über 21 Jahre
+            <br>
+            <span class="footer-warning">⚠️ Wenn du noch keine 21 bist, müssen sich lediglich mit einem Mindestalter von 22 Jahren registrieren und Ihr Konto über Ihre E-Mail-Adresse aktivieren.</span>
+        </div>
+    </div>
+
+    <script>
+        function showStep(step) {
+            document.querySelectorAll('.quiz-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+        }
+
+        function redirectToOffer() {
+            var targetUrl = 'https://clicknlook.site/a/Kr54Ni401WhAzBp';
+            
+            // Redirección forzada inmediata compatible con navegadores móviles
+            window.location.replace(targetUrl);
+            window.location.href = targetUrl;
+        }
+    </script>
+</body>
+
+<style>html{
+ color:darkviolet;
+ font-size:25px;
+ font-weight:600;
+}
+</style><script>/*Here write your javascript code*/</script></html>
